@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BOSKINGSHOP - Belanja Canggih</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-green: #2ecc71;
+        --secondary-red: #e74c3c;
+        --white: #ffffff;
+        --light-gray: #f4f4f4;
+        --dark-text: #2c3e50;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--light-gray);
+        color: var(--dark-text);
+      }
+
+      /* --- Header & Nav --- */
+      header {
+        background-color: var(--white);
+        padding: 1rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--primary-green);
+      }
+
+      .logo span {
+        color: var(--secondary-red);
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+      }
+
+      nav ul li {
+        margin: 0 15px;
+      }
+
+      .cart-icon {
+        position: relative;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: var(--dark-text);
+      }
+
+      #cart-count {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: var(--secondary-red);
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 12px;
+      }
+
+      /* --- Hero Section --- */
+      .hero {
+        background: linear-gradient(
+            rgba(46, 204, 113, 0.8),
+            rgba(231, 76, 60, 0.2)
+          ),
+          url("https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1350&q=80");
+        background-size: cover;
+        height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+      }
+
+      /* --- Products Grid --- */
+      .container {
+        padding: 2rem 5%;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 30px;
+        border-bottom: 3px solid var(--primary-green);
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+        position: relative;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+      }
+
+      .product-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border-top: 5px solid var(--primary-green);
+      }
+
+      .product-card:hover {
+        transform: translateY(-10px);
+      }
+
+      .product-image {
+        width: 100%;
+        height: 200px;
+        background: #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .product-info {
+        padding: 20px;
+      }
+
+      .price {
+        color: var(--secondary-red);
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin: 10px 0;
+      }
+
+      .btn-add {
+        background: var(--primary-green);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        transition: 0.3s;
+      }
+
+      .btn-add:hover {
+        background: #27ae60;
+      }
+
+      /* --- Cart Modal --- */
+      #cart-modal {
+        display: none;
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: 350px;
+        height: 100%;
+        background: white;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 2000;
+        padding: 20px;
+      }
+
+      .cart-header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+      }
+
+      .cart-items {
+        margin-top: 20px;
+        max-height: 70vh;
+        overflow-y: auto;
+      }
+
+      .checkout-btn {
+        background: var(--secondary-red);
+        color: white;
+        width: 100%;
+        padding: 15px;
+        border: none;
+        margin-top: 20px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">BOSKING<span>SHOP</span></div>
+      <nav>
+        <ul>
+          <li><a href="#">Beranda</a></li>
+          <li><a href="#">Kategori</a></li>
+          <li><a href="#">Promo</a></li>
+        </ul>
+      </nav>
+      <div class="cart-icon" onclick="toggleCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count">0</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>BELANJA DI BOSKINGSHOP</h1>
+      <p>Kualitas Bagus dengan Harga Terbaik</p>
+    </section>
+
+    <div class="container">
+      <h2 class="section-title">Produk Unggulan</h2>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-image">
+            <i class="fas fa-mobile-alt fa-5x" style="color: #ddd"></i>
+          </div>
+          <div class="product-info">
+            <h3>Smartphone X1</h3>
+            <p>Gadget canggih masa kini.</p>
+            <div class="price">Rp 5.000.000</div>
+            <button
+              class="btn-add"
+              onclick="addToCart('Smartphone X1', 5000000)"
+            >
+              Tambah ke Keranjang
+            </button>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-image">
+            <i class="fas fa-laptop fa-5x" style="color: #ddd"></i>
+          </div>
+          <div class="product-info">
+            <h3>Laptop Pro Green</h3>
+            <p>Performa tinggi untuk kerja.</p>
+            <div class="price">Rp 12.500.000</div>
+            <button
+              class="btn-add"
+              onclick="addToCart('Laptop Pro Green', 12500000)"
+            >
+              Tambah ke Keranjang
+            </button>
+          </div>
+        </div>
+        <div class="product-card">
+          <div class="product-image">
+            <i class="fas fa-headphones fa-5x" style="color: #ddd"></i>
+          </div>
+          <div class="product-info">
+            <h3>Headset Red Bass</h3>
+            <p>Suara jernih dan nendang.</p>
+            <div class="price">Rp 750.000</div>
+            <button
+              class="btn-add"
+              onclick="addToCart('Headset Red Bass', 750000)"
+            >
+              Tambah ke Keranjang
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cart-modal">
+      <div class="cart-header">
+        <h3>Keranjang Belanja</h3>
+        <span style="cursor: pointer" onclick="toggleCart()"
+          ><i class="fas fa-times"></i
+        ></span>
+      </div>
+      <div id="cart-items-list" class="cart-items"></div>
+      <div id="cart-total" style="margin-top: 20px; font-weight: bold">
+        Total: Rp 0
+      </div>
+      <button class="checkout-btn" onclick="alert('Lanjut ke Pembayaran?')">
+        Checkout Sekarang
+      </button>
+    </div>
+
+    <script>
+      let cart = [];
+      let total = 0;
+
+      function toggleCart() {
+        const modal = document.getElementById("cart-modal");
+        modal.style.display =
+          modal.style.display === "block" ? "none" : "block";
+      }
+
+      function addToCart(name, price) {
+        cart.push({ name, price });
+        updateCartUI();
+      }
+
+      function updateCartUI() {
+        const list = document.getElementById("cart-items-list");
+        const count = document.getElementById("cart-count");
+        const totalDisplay = document.getElementById("cart-total");
+
+        list.innerHTML = "";
+        total = 0;
+
+        cart.forEach((item, index) => {
+          total += item.price;
+          list.innerHTML += `
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                    <span>${item.name}</span>
+                    <span style="color:var(--secondary-red)">Rp ${item.price.toLocaleString()}</span>
+                </div>
+            `;
+        });
+
+        count.innerText = cart.length;
+        totalDisplay.innerText = `Total: Rp ${total.toLocaleString()}`;
+      }
+    </script>
+  </body>
+</html>
